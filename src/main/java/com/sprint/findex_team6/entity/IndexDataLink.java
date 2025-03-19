@@ -26,8 +26,6 @@ public class IndexDataLink {
   @Enumerated(EnumType.STRING)
   private ConnectType sourceType;              // 유형 ("지수 정보", "지수 데이터")
 
-
-  // 연동된 지수 정보
   private LocalDateTime targetDate;     // 연동된 데이터의 날짜
   private String worker;          // 작업자 (요청 IP 또는 "system")
   private LocalDateTime jobTime; // 작업일시
@@ -36,5 +34,5 @@ public class IndexDataLink {
   //지수 정보
   @ManyToOne //하나의 지수 정보는 여러번 연동 작업을 함
   @JoinColumn(name = "index_id")
-  private Index index; //연동된 지수 정보 
+  private Index index; //연동된 지수 정보
 }

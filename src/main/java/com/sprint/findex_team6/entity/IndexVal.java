@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import javax.net.ssl.SSLSession;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,13 +26,13 @@ public class IndexVal {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  private LocalDate date;         // 기준 일자
+  private LocalDate baseDate;         // 기준 일자
 
   @Enumerated(EnumType.STRING)
   private SourceType sourceType;      // 소스 타입
 
   private BigDecimal marketPrice; // 시가
-  private BigDecimal closePrice; // 종가
+  private BigDecimal closingPrice; // 종가
   private BigDecimal highPrice; // 고가
   private BigDecimal lowPrice;  // 저가
   private BigDecimal versus;       // 대비
@@ -43,5 +44,4 @@ public class IndexVal {
 
   @ManyToOne //하나의 지수정보에 대해 여러개의 지수 데이터
   private Index index;
-
 }
