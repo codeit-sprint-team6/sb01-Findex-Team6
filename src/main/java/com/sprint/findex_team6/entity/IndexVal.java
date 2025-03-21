@@ -19,6 +19,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Getter
@@ -38,6 +40,7 @@ public class IndexVal {
 
   @Enumerated(EnumType.STRING)
   @Column(name = "source_type", columnDefinition = "source_type")
+  @JdbcTypeCode(SqlTypes.NAMED_ENUM)
   private SourceType sourceType;      // 소스 타입
 
   private BigDecimal marketPrice; // 시가
