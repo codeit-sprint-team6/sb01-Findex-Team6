@@ -32,7 +32,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BatchAutoSyncIndexData {
 
   private final AutoIntegrationRepository autoIntegrationRepository;
-  private final IndexDataLinkRepository indexDataLinkRepository;
   private final IndexValRepository indexValRepository;
 
   private final RestTemplate restTemplate;

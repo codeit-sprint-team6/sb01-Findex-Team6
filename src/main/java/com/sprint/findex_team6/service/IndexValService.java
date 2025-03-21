@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -399,30 +398,37 @@ public class IndexValService {
     Sort sort = getSort(sortField, sortDirection);
 
     // 데이터 조회
-    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId, startDate, endDate, sort);
+    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId,startDate, endDate, sort);
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
-    response.setHeader("Content-Disposition", "attachment; filename=\"index_data.csv\"");
+    response.setHeader("Content-Disposition", "attachment; filename=\"index_data-export.csv\"");
 
     try (PrintWriter writer = response.getWriter();
         CSVWriter csvWriter = new CSVWriter(writer)) {
 
       // CSV 헤더 작성
-      String[] header = {"Index ID", "Base Date", "Closing Price"};
+      String[] header = {"기준일자", "종가", "고가", "저가", "전일대비등락", "등락률", "거래량", "거래대금", "시가총액"};
       csvWriter.writeNext(header);
 
       // 데이터 추가
       for (IndexVal data : indexData) {
         String[] row = {
-            data.getIndex().getId().toString(),
             data.getBaseDate().toString(),
-            data.getClosingPrice().toString()
+            data.getClosingPrice().toString(),
+            data.getHighPrice().toString(),
+            data.getLowPrice().toString(),
+            data.getVersus().toString(),
+            data.getFluctuationRate().toString(),
+            data.getTradingQuantity().toString(),
+            data.getTradingPrice().toString(),
+            data.getMarketTotalAmount().toString()
         };
         csvWriter.writeNext(row);
       }
 
     } catch (Exception e) {
+      log.error("CSV 파일 생성 중 오류 발생", e);
       throw new RuntimeException("CSV 파일을 생성하는 중 오류가 발생했습니다.", e);
     }
   }
@@ -431,10 +437,9 @@ public class IndexValService {
    * 날짜 파싱 메서드 (유효하지 않으면 기본값 사용)
    */
   private LocalDate parseDateOrDefault(String dateStr, LocalDate defaultDate) {
-    try {
-      return dateStr != null ? LocalDate.parse(dateStr) : defaultDate;
-    } catch (DateTimeParseException e) {
-      return defaultDate;
-    }
+   if(dateStr == null || dateStr.isEmpty()) {
+     return defaultDate;
+   }
+   return LocalDate.parse(dateStr);
   }
 }
