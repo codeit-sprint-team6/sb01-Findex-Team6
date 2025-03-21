@@ -19,7 +19,6 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -409,14 +408,21 @@ public class IndexValService {
         CSVWriter csvWriter = new CSVWriter(writer)) {
 
       // CSV 헤더 작성
-      String[] header = {"Base Date", "Closing Price"};
+      String[] header = {"기준일자", "종가", "고가", "저가", "전일대비등락", "등락률", "거래량", "거래대금", "시가총액"};
       csvWriter.writeNext(header);
 
       // 데이터 추가
       for (IndexVal data : indexData) {
         String[] row = {
             data.getBaseDate().toString(),
-            data.getClosingPrice().toString()
+            data.getClosingPrice().toString(),
+            data.getHighPrice().toString(),
+            data.getLowPrice().toString(),
+            data.getVersus().toString(),
+            data.getFluctuationRate().toString(),
+            data.getTradingQuantity().toString(),
+            data.getTradingPrice().toString(),
+            data.getMarketTotalAmount().toString()
         };
         csvWriter.writeNext(row);
       }
