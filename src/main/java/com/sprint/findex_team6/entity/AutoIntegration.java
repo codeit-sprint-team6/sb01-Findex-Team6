@@ -34,4 +34,9 @@ public class AutoIntegration {
   public void changeEnable(boolean enabled) {
     this.enabled = enabled;
   }
+
+  public AutoIntegration(Index index, Boolean enabled) {
+    this.index = index;
+    this.enabled = enabled;
+  }
 }
