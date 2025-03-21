@@ -49,7 +49,7 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
   @Query("SELECT iv FROM IndexVal iv "
       + "WHERE iv.index.id = :indexId "
       + "AND iv.baseDate BETWEEN :startDate AND :endDate "
-      + "AND (iv.baseDate > :cursor OR (iv.baseDate = :cursor AND iv.id < :idAfter)) ")
+      + "AND (iv.baseDate > :cursor OR (iv.baseDate = :cursor AND iv.id > :idAfter)) ")
   Page<IndexVal> findByBaseDateCursorAsc(
       Long indexId, LocalDate startDate, LocalDate endDate,
       LocalDate cursor, Long idAfter, Pageable pageable);
@@ -65,7 +65,7 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
   @Query("SELECT iv FROM IndexVal iv "
       + "WHERE iv.index.id = :indexId "
       + "AND iv.baseDate BETWEEN :startDate AND :endDate "
-      + "AND (iv.closingPrice > :cursor OR (iv.closingPrice = :cursor AND iv.id < :idAfter)) ")
+      + "AND (iv.closingPrice > :cursor OR (iv.closingPrice = :cursor AND iv.id > :idAfter)) ")
   Page<IndexVal> findByClosingPriceCursorAsc(
       Long indexId, LocalDate startDate, LocalDate endDate,
       BigDecimal cursor, Long idAfter, Pageable pageable);
