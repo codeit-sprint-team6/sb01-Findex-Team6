@@ -76,9 +76,7 @@ public class IndexValController {
        @RequestParam(required = false) String sortField,
        @RequestParam(required = false, defaultValue = "desc") String sortDirection,
       HttpServletResponse response) {
-    if(indexInfoId == null) {
-      indexInfoId = -1L; // -1로 기본값 설정
-    }
+
     indexValService.exportIndexDataToCsv(indexInfoId, startDate, endDate, sortField, sortDirection, response);
   }
 

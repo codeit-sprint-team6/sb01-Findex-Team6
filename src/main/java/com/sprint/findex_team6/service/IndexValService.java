@@ -399,12 +399,7 @@ public class IndexValService {
     Sort sort = getSort(sortField, sortDirection);
 
     // 데이터 조회
-    List<IndexVal> indexData;
-    if(indexInfoId == -1L) {
-      indexData = indexValRepository.findByIndexIdAndBaseDateBetween(startDate, endDate, sort);
-    } else {
-      indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId, startDate, endDate, sort);
-    }
+    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId,startDate, endDate, sort);
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
@@ -414,13 +409,12 @@ public class IndexValService {
         CSVWriter csvWriter = new CSVWriter(writer)) {
 
       // CSV 헤더 작성
-      String[] header = {"Index ID", "Base Date", "Closing Price"};
+      String[] header = {"Base Date", "Closing Price"};
       csvWriter.writeNext(header);
 
       // 데이터 추가
       for (IndexVal data : indexData) {
         String[] row = {
-            data.getIndex().getId().toString(),
             data.getBaseDate().toString(),
             data.getClosingPrice().toString()
         };
