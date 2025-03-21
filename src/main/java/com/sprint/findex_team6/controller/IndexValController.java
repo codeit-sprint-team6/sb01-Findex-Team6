@@ -20,17 +20,11 @@ import com.sprint.findex_team6.dto.request.IndexDataQueryRequest;
 import com.sprint.findex_team6.dto.request.IndexDataSortField;
 import com.sprint.findex_team6.dto.request.IndexDataUpdateRequest;
 import com.sprint.findex_team6.dto.request.SortDirection;
-import com.sprint.findex_team6.service.IndexValService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -62,20 +56,27 @@ public class IndexValController {
   @GetMapping("/performance/rank")
   public ResponseEntity<List<RankedIndexPerformanceDto>> getIndexPerformanceRank(
       @RequestParam String periodType,
-      @RequestParam Long indexInfoId,
+      @RequestParam(required = false) Long indexInfoId, //indexInfoId 선택 조건 추가
       @RequestParam int limit) {
-    List<RankedIndexPerformanceDto> dto = indexValService.getIndexPerformanceRank(periodType, indexInfoId, limit);
+    List<RankedIndexPerformanceDto> dto;
+
+    if(indexInfoId == null) {
+      dto = indexValService.getIndexPerformanceRank(periodType, limit);
+    } else {
+      dto = indexValService.getIndexPerformanceRank(periodType, indexInfoId, limit);
+    }
     return ResponseEntity.status(HttpStatus.OK).body(dto);
   }
 
   @GetMapping("/export/csv") //Csv 파일 변환
   public void exportCsv(
-       @RequestParam Long indexInfoId,
+       @RequestParam(required = false) Long indexInfoId,
        @RequestParam(required = false) String startDate,
        @RequestParam(required = false) String endDate,
        @RequestParam(required = false) String sortField,
        @RequestParam(required = false, defaultValue = "desc") String sortDirection,
       HttpServletResponse response) {
+
     indexValService.exportIndexDataToCsv(indexInfoId, startDate, endDate, sortField, sortDirection, response);
   }
 
