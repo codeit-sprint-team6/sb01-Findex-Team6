@@ -402,7 +402,7 @@ public class IndexValService {
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
-    response.setHeader("Content-Disposition", "attachment; filename=\"index_data.csv\"");
+    response.setHeader("Content-Disposition", "attachment; filename=\"index_data-export.csv\"");
 
     try (PrintWriter writer = response.getWriter();
         CSVWriter csvWriter = new CSVWriter(writer)) {
