@@ -399,7 +399,12 @@ public class IndexValService {
     Sort sort = getSort(sortField, sortDirection);
 
     // 데이터 조회
-    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId, startDate, endDate, sort);
+    List<IndexVal> indexData;
+    if(indexInfoId == -1L) {
+      indexData = indexValRepository.findByIndexIdAndBaseDateBetween(startDate, endDate, sort);
+    } else {
+      indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId, startDate, endDate, sort);
+    }
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
