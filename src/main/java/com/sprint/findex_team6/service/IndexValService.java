@@ -428,6 +428,7 @@ public class IndexValService {
       }
 
     } catch (Exception e) {
+      log.error("CSV 파일 생성 중 오류 발생", e);
       throw new RuntimeException("CSV 파일을 생성하는 중 오류가 발생했습니다.", e);
     }
   }
@@ -436,10 +437,9 @@ public class IndexValService {
    * 날짜 파싱 메서드 (유효하지 않으면 기본값 사용)
    */
   private LocalDate parseDateOrDefault(String dateStr, LocalDate defaultDate) {
-    try {
-      return dateStr != null ? LocalDate.parse(dateStr) : defaultDate;
-    } catch (DateTimeParseException e) {
-      return defaultDate;
-    }
+   if(dateStr == null || dateStr.isEmpty()) {
+     return defaultDate;
+   }
+   return LocalDate.parse(dateStr);
   }
 }

@@ -32,6 +32,7 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
   List<IndexVal> findByIndexIdAndBaseDateBetween(Long indexId, LocalDate startDate, LocalDate endDate, Sort sort);
 
   List<IndexVal> findByIndexIdAndBaseDateBetween(LocalDate startDate, LocalDate endDate, Sort sort);
+
   Optional<IndexVal> findAllByIndex_IdAndBaseDate(Long indexId, LocalDate baseDate);
 
   Page<IndexVal> findByIndex_IdAndBaseDateBetween(
@@ -69,6 +70,5 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
   Page<IndexVal> findByClosingPriceCursorAsc(
       Long indexId, LocalDate startDate, LocalDate endDate,
       BigDecimal cursor, Long idAfter, Pageable pageable);
-
 
 }
