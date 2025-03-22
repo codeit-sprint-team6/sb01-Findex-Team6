@@ -55,27 +55,23 @@ public class IndexValController {
 
   @GetMapping("/performance/rank")
   public ResponseEntity<List<RankedIndexPerformanceDto>> getIndexPerformanceRank(
-      @RequestParam String periodType,
-      @RequestParam(required = false) Long indexInfoId, //indexInfoId는 선택적으로 받음
-      @RequestParam int limit) {
-    List<RankedIndexPerformanceDto> dto;
-
-    if(indexInfoId == null) {
-      dto = indexValService.getIndexPerformanceRank(periodType, null, limit);
-    } else {
-      dto = indexValService.getIndexPerformanceRank(periodType, indexInfoId, limit);
-    }
+      @RequestParam(defaultValue = "DAILY") String periodType,
+      @RequestParam(required = false) Long indexInfoId, //indexInfoId 선택 조건 추가
+      @RequestParam(defaultValue = "10") int limit) {
+    List<RankedIndexPerformanceDto> dto = indexValService
+        .getIndexPerformanceRank(periodType, indexInfoId, limit);
     return ResponseEntity.status(HttpStatus.OK).body(dto);
   }
 
   @GetMapping("/export/csv") //Csv 파일 변환
   public void exportCsv(
-       @RequestParam Long indexInfoId,
+       @RequestParam(required = false) Long indexInfoId,
        @RequestParam(required = false) String startDate,
        @RequestParam(required = false) String endDate,
        @RequestParam(required = false) String sortField,
        @RequestParam(required = false, defaultValue = "desc") String sortDirection,
       HttpServletResponse response) {
+
     indexValService.exportIndexDataToCsv(indexInfoId, startDate, endDate, sortField, sortDirection, response);
   }
 
