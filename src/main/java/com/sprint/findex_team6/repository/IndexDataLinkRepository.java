@@ -7,6 +7,7 @@ import java.util.Optional;
 import lombok.NonNull;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.query.Param;
 
 public interface IndexDataLinkRepository extends JpaRepository<IndexDataLink, Long>,
     IndexDataLinkRepositoryQuerydsl {
@@ -18,6 +19,8 @@ public interface IndexDataLinkRepository extends JpaRepository<IndexDataLink, Lo
   @NonNull
   @Override
   List<IndexDataLink> findAll();
+
+  List<IndexDataLink> findByIndex_IdIn(@Param("ids") List<Integer> ids);
 
   @EntityGraph(attributePaths = {"index"})
   Optional<IndexDataLink> findFirstByIndex_IdAndTargetDate(Long index_id, LocalDate targetDate);

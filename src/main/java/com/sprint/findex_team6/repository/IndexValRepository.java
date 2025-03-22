@@ -11,6 +11,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,9 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
   List<IndexVal> findByIndex_Id(Long id);
 
   boolean existsByIndex_IdIn(List<Long> ids);
+
+  @EntityGraph(attributePaths = {"index"})
+  List<IndexVal> findByIndex_IdIn(List<Integer> ids);
 
   //Dashboard
   List<IndexVal> findByIndexIdInAndBaseDateIn(List<Long> indexIds, List<LocalDate> startDate);
