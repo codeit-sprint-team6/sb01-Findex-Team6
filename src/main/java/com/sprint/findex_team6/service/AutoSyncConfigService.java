@@ -31,13 +31,14 @@ public class AutoSyncConfigService {
     AutoIntegration autoIntegration = autoIntegrationRepository.findById(id)
         .orElseThrow(() -> new IllegalArgumentException("찾는 자동 연동 설정이 없습니다."));
 
-    autoIntegration.changeEnable(request.enable());
+    autoIntegration.changeEnable(request.enabled());
 
     return AutoSyncConfigDto.builder()
         .id(autoIntegration.getId())
         .indexInfoId(autoIntegration.getIndex().getId())
         .indexClassification(autoIntegration.getIndex().getIndexClassification())
         .indexName(autoIntegration.getIndex().getIndexName())
+        .enabled(request.enabled())
         .build();
   }
 
