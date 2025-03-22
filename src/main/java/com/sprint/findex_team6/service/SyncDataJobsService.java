@@ -78,6 +78,11 @@ public class SyncDataJobsService {
    **/
   public List<SyncJobDto> syncData(IndexDataSyncRequest request, HttpServletRequest httpRequest) {
 
+    List<SyncJobDto> links = checkExistsSyncData(request);
+    if (links != null) {
+      return links;
+    }
+
     List<SyncJobDto> syncJobDtoList = new ArrayList<>();
     List<Index> indexList = getIndexList(request);
 
@@ -91,6 +96,33 @@ public class SyncDataJobsService {
     schedulerAsyncIndexData(indexList, dummyResponse, items);
 
     return dummyResponse;
+  }
+
+  private List<SyncJobDto> checkExistsSyncData(IndexDataSyncRequest request) {
+    List<IndexVal> findIndexVals = indexValRepository.findByIndex_IdIn(request.indexInfoIds());
+
+    if (!findIndexVals.isEmpty()) {
+
+      List<IndexDataLink> links = indexDataLinkRepository.findByIndex_IdIn(
+          (request.indexInfoIds()));
+
+      return links.stream()
+          .map(link -> new SyncJobDto(
+              link.getId(),
+              link.getJobType(),
+              link.getIndex().getId(),
+              link.getTargetDate(),
+              link.getWorker(),
+              link.getJobTime(),
+              isSuccess(link)
+          ))
+          .toList();
+    }
+    return null;
+  }
+
+  private String isSuccess(IndexDataLink link) {
+    return link.getResult().equals(true) ? "SUCCESS" : "FAILED";
   }
 
   /**
