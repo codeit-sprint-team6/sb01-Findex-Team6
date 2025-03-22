@@ -55,16 +55,11 @@ public class IndexValController {
 
   @GetMapping("/performance/rank")
   public ResponseEntity<List<RankedIndexPerformanceDto>> getIndexPerformanceRank(
-      @RequestParam String periodType,
+      @RequestParam(defaultValue = "DAILY") String periodType,
       @RequestParam(required = false) Long indexInfoId, //indexInfoId 선택 조건 추가
-      @RequestParam int limit) {
-    List<RankedIndexPerformanceDto> dto;
-
-    if(indexInfoId == null) {
-      dto = indexValService.getIndexPerformanceRank(periodType, limit);
-    } else {
-      dto = indexValService.getIndexPerformanceRank(periodType, indexInfoId, limit);
-    }
+      @RequestParam(defaultValue = "10") int limit) {
+    List<RankedIndexPerformanceDto> dto = indexValService
+        .getIndexPerformanceRank(periodType, indexInfoId, limit);
     return ResponseEntity.status(HttpStatus.OK).body(dto);
   }
 
