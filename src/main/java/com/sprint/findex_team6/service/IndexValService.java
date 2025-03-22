@@ -3,6 +3,7 @@ package com.sprint.findex_team6.service;
 import static com.sprint.findex_team6.error.ErrorCode.INDEX_NOT_FOUND;
 
 import com.opencsv.CSVWriter;
+import com.sprint.findex_team6.dto.CursorPageResponse;
 import com.sprint.findex_team6.dto.IndexDataDto;
 import com.sprint.findex_team6.dto.dashboard.ChartDataPoint;
 import com.sprint.findex_team6.dto.dashboard.IndexChartDto;
@@ -10,35 +11,33 @@ import com.sprint.findex_team6.dto.dashboard.IndexPerformanceDto;
 import com.sprint.findex_team6.dto.dashboard.RankedIndexPerformanceDto;
 import com.sprint.findex_team6.dto.request.IndexDataCreateRequest;
 import com.sprint.findex_team6.dto.request.IndexDataQueryRequest;
+import com.sprint.findex_team6.dto.request.IndexDataUpdateRequest;
 import com.sprint.findex_team6.entity.Index;
 import com.sprint.findex_team6.entity.IndexVal;
+import com.sprint.findex_team6.entity.SourceType;
 import com.sprint.findex_team6.error.CustomException;
+import com.sprint.findex_team6.exception.NotFoundException;
+import com.sprint.findex_team6.mapper.CursorPageResponseMapper;
+import com.sprint.findex_team6.mapper.IndexValMapper;
 import com.sprint.findex_team6.repository.IndexRepository;
 import com.sprint.findex_team6.repository.IndexValRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.PrintWriter;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.sprint.findex_team6.dto.CursorPageResponse;
-import com.sprint.findex_team6.dto.request.IndexDataUpdateRequest;
-import com.sprint.findex_team6.entity.SourceType;
-import com.sprint.findex_team6.exception.NotFoundException;
-import com.sprint.findex_team6.mapper.CursorPageResponseMapper;
-import com.sprint.findex_team6.mapper.IndexValMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Order;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
@@ -205,11 +204,11 @@ public class IndexValService {
   private LocalDate calculateStartDate(String periodType) {
     LocalDate endDate = LocalDate.now();
     return switch (periodType) {
-      case "DAILY" -> endDate;
-      case "WEEKLY" -> endDate.minusWeeks(12);
-      case "MONTHLY" -> endDate.minusMonths(12);
-      case "QUARTERLY" -> endDate.minusMonths(36);
-      case "YEARLY" -> endDate.minusYears(5);
+      case "DAILY" -> endDate.minusDays(1);
+      case "WEEKLY" -> endDate.minusWeeks(1);
+      case "MONTHLY" -> endDate.minusMonths(1);
+      case "QUARTERLY" -> endDate.minusMonths(3);
+      case "YEARLY" -> endDate.minusYears(1);
       default -> throw new IllegalStateException("Unexpected value: " + periodType);
     };
   }
@@ -243,38 +242,56 @@ public class IndexValService {
   public List<RankedIndexPerformanceDto> getIndexPerformanceRank(String periodType, Long indexInfoId, int limit) {
     LocalDate beforeDate = calculateStartDate(periodType);
     LocalDate today = LocalDate.now();
-
-    //기준이 되는 지수 조회
-    Index targetIndexInfo = indexRepository.findById(indexInfoId)
-        .orElseThrow(() -> new CustomException(INDEX_NOT_FOUND));
+    List<IndexPerformanceDto> result = new ArrayList<>(100);
 
     //동일 분류 지수 가져오기
-    List<Index> indexInfoList = indexRepository.findByIndexClassification(targetIndexInfo.getIndexClassification());
+    List<Index> indexInfoList = indexRepository.findAll();
+    for (Index index : indexInfoList) {
+      Optional<IndexVal> start = indexValRepository
+          .findFirstByIndexAndBaseDateGreaterThanOrderByBaseDateAsc(index, beforeDate);
+      Optional<IndexVal> end = indexValRepository
+          .findFirstByIndexAndBaseDateLessThanOrderByBaseDateDesc(index, today);
+      if (start.isEmpty() || end.isEmpty()) {
+        continue;
+      }
 
-    List<IndexVal> indexDataList = indexValRepository.findByIndexInAndBaseDateIn(indexInfoList, List.of(beforeDate, today));
+      IndexPerformanceDto indexPerformanceDto = createIndexPerformanceDto(
+          index, start.get(), end.get());
+      result.add(indexPerformanceDto);
+    }
 
-    //데이터 매핑 -> map으로 정리
-    Map<Long, IndexVal> beforeDataMap = indexDataList.stream()
-        .filter(data -> data.getBaseDate().equals(beforeDate))
-        .collect(Collectors.toMap(data -> data.getIndex().getId(), Function.identity()));
+    result.sort(Comparator.comparing(IndexPerformanceDto::fluctuationRate).reversed());
+    List<RankedIndexPerformanceDto> dtos = new ArrayList<>(result.size());
+    int rank = 0;
+    for (IndexPerformanceDto dto : result) {
+      dtos.add(new RankedIndexPerformanceDto(dto, ++rank));
+    }
 
-    Map<Long, IndexVal> currentDataMap = indexDataList.stream()
-        .filter(data -> data.getBaseDate().equals(today))
-        .collect(Collectors.toMap(data -> data.getIndex().getId(), Function.identity()));
+    if (indexInfoId != null) {
+      return dtos.stream()
+          .filter(dto -> dto.performance().indexInfoId().equals(indexInfoId))
+          .toList();
+    } else {
+      return dtos.size() < limit ? dtos : dtos.subList(0, limit);
+    }
+  }
 
-    //성과 계산
-    List<IndexPerformanceDto> performanceList = indexInfoList.stream()
-        .map(indexInfo -> createIndexPerformanceDto(indexInfo, beforeDataMap, currentDataMap))
-        .flatMap(Optional::stream)
-        .sorted(Comparator.comparing(IndexPerformanceDto::fluctuationRate).reversed())
-        .limit(limit)
-        .toList();
+  private IndexPerformanceDto createIndexPerformanceDto(Index index, IndexVal start, IndexVal end) {
 
-    //순위 부여
-    return IntStream.range(0, performanceList.size())
-        .mapToObj(i -> new RankedIndexPerformanceDto(performanceList.get(i), i + 1))
-        .limit(limit)
-        .collect(Collectors.toList());
+    BigDecimal startPrice = start.getClosingPrice();
+    BigDecimal endPrice = end.getClosingPrice();
+    BigDecimal versus = endPrice.subtract(startPrice);
+    BigDecimal fluctuationRate = versus.divide(startPrice, 4, RoundingMode.HALF_UP).multiply(BigDecimal.valueOf(100)).setScale(2, RoundingMode.HALF_UP);
+
+    return new IndexPerformanceDto(
+        index.getId(),
+        index.getIndexClassification(),
+        index.getIndexName(),
+        versus,
+        fluctuationRate,
+        startPrice,
+        endPrice
+    );
   }
 
   //특정 지수 차트 데이터 조회
@@ -364,30 +381,37 @@ public class IndexValService {
     Sort sort = getSort(sortField, sortDirection);
 
     // 데이터 조회
-    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId, startDate, endDate, sort);
+    List<IndexVal> indexData = indexValRepository.findByIndexIdAndBaseDateBetween(indexInfoId,startDate, endDate, sort);
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
-    response.setHeader("Content-Disposition", "attachment; filename=\"index_data.csv\"");
+    response.setHeader("Content-Disposition", "attachment; filename=\"index_data-export.csv\"");
 
     try (PrintWriter writer = response.getWriter();
         CSVWriter csvWriter = new CSVWriter(writer)) {
 
       // CSV 헤더 작성
-      String[] header = {"Index ID", "Base Date", "Closing Price"};
+      String[] header = {"기준일자", "종가", "고가", "저가", "전일대비등락", "등락률", "거래량", "거래대금", "시가총액"};
       csvWriter.writeNext(header);
 
       // 데이터 추가
       for (IndexVal data : indexData) {
         String[] row = {
-            data.getIndex().getId().toString(),
             data.getBaseDate().toString(),
-            data.getClosingPrice().toString()
+            data.getClosingPrice().toString(),
+            data.getHighPrice().toString(),
+            data.getLowPrice().toString(),
+            data.getVersus().toString(),
+            data.getFluctuationRate().toString(),
+            data.getTradingQuantity().toString(),
+            data.getTradingPrice().toString(),
+            data.getMarketTotalAmount().toString()
         };
         csvWriter.writeNext(row);
       }
 
     } catch (Exception e) {
+      log.error("CSV 파일 생성 중 오류 발생", e);
       throw new RuntimeException("CSV 파일을 생성하는 중 오류가 발생했습니다.", e);
     }
   }
@@ -396,10 +420,9 @@ public class IndexValService {
    * 날짜 파싱 메서드 (유효하지 않으면 기본값 사용)
    */
   private LocalDate parseDateOrDefault(String dateStr, LocalDate defaultDate) {
-    try {
-      return dateStr != null ? LocalDate.parse(dateStr) : defaultDate;
-    } catch (DateTimeParseException e) {
-      return defaultDate;
-    }
+   if(dateStr == null || dateStr.isEmpty()) {
+     return defaultDate;
+   }
+   return LocalDate.parse(dateStr);
   }
 }

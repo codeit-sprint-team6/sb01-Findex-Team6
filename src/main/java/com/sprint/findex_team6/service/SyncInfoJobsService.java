@@ -51,6 +51,8 @@ public class SyncInfoJobsService {
   private final IndexDataLinkRepository indexDataLinkRepository;
   private final IndexRepository indexRepository;
 
+  private final AutoIntegrationService autoIntegrationService;
+
   private final PlatformTransactionManager transactionManager;
   private final RestTemplate restTemplate;
 
@@ -427,6 +429,7 @@ public class SyncInfoJobsService {
       // 실제 데이터로 업데이트
       updateIndex(index, item);
       indexRepository.save(index);
+      autoIntegrationService.save(index, false);
 
       // 관련 IndexDataLink 찾기
       List<IndexDataLink> links = indexDataLinkRepository.findByIndex_Id(indexId);
