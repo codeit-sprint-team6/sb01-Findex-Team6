@@ -65,12 +65,13 @@ public class IndexValController {
 
   @GetMapping("/export/csv") //Csv 파일 변환
   public void exportCsv(
-       @RequestParam Long indexInfoId,
+       @RequestParam(required = false) Long indexInfoId,
        @RequestParam(required = false) String startDate,
        @RequestParam(required = false) String endDate,
        @RequestParam(required = false) String sortField,
        @RequestParam(required = false, defaultValue = "desc") String sortDirection,
       HttpServletResponse response) {
+
     indexValService.exportIndexDataToCsv(indexInfoId, startDate, endDate, sortField, sortDirection, response);
   }
 
