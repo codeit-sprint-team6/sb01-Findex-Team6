@@ -104,31 +104,35 @@
      - 최근 20일간의 평균 계산합니다 : MA20
   3. 최종적으로 객체를 생성하여 반환합니다.
 
-[화면 기록 2025-03-23 오후 10.24.07.mov](..%2F%ED%99%94%EB%A9%B4%20%EA%B8%B0%EB%A1%9D%202025-03-23%20%EC%98%A4%ED%9B%84%2010.24.07.mov)
+
+<img width="1303" alt="차트조회 2025-03-23 오후 10 42 03" src="https://github.com/user-attachments/assets/ce0603d1-a32f-4028-860b-8cfa02e0852d" />
 
 
 - 관심지수 성과 조회 
   - 즐겨찾기(favorite) 설정 한 지수들에 대해 특정 기간동안의 성과를 계산해서 반환하는 기능입니다.
+<img width="1159" alt="즐겨찾기 지수조회 2025-03-23 오후 10 20 39" src="https://github.com/user-attachments/assets/892ed9ff-a63c-483f-aa87-37f7ed50d88b" />
 
-![스크린샷 2025-03-23 오후 10.20.39.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-03-23%20%EC%98%A4%ED%9B%84%2010.20.39.png)
 
 - 지수 성과 랭킹조회
   - 특정 기간 동안 지수의 성과 계산 > 순위를 매김
   - 해당 기간 동안의 각 지수의 성과 (상승률, 하락률)를 계산합니다.
   - 모든 지수에 대해 성과를 비교해 내림차순 정렬 후, 순위를 매깁니다. 
   - 사용자가 특정 indexInfoId를 입력하면 해당 지수의 순위만을 반환할 수 있습니다.
-
-[화면 기록 2025-03-23 오후 10.27.37.mov](..%2F%ED%99%94%EB%A9%B4%20%EA%B8%B0%EB%A1%9D%202025-03-23%20%EC%98%A4%ED%9B%84%2010.27.37.mov)
   
+
+https://github.com/user-attachments/assets/bca6cfaf-fc06-4644-8ada-92ff383b61b2
+
+
 - 지수 데이터 CSV export > openCSV 방식 활용
   - PrintWriter를 이용해 응답 response의 출력 스트림을 가져옵니다. 
   - CSVWriter(OpenCSV)를 사용해 CSV 파일을 생성합니다. 
   - 리스트를 순회하며 각 데이터를 CSV의 형식으로 변환하여 저장합니다.
+<img width="1403" alt="export 2025-03-23 오후 10 30 02" src="https://github.com/user-attachments/assets/3ce1950e-b964-4c27-bae6-a9f15aacc4ab" />
+<img width="337" alt="download 2025-03-23 오후 10 30 23" src="https://github.com/user-attachments/assets/6f403dbf-a8ac-4732-bc8e-23b2588febcb" />
+<img width="687" alt="csvFile 2025-03-23 오후 10 30 45" src="https://github.com/user-attachments/assets/164e79b2-408f-4038-b770-cbb07800c4dd" />
 
-![스크린샷 2025-03-23 오후 10.30.02.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-03-23%20%EC%98%A4%ED%9B%84%2010.30.02.png)
-![스크린샷 2025-03-23 오후 10.30.23.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-03-23%20%EC%98%A4%ED%9B%84%2010.30.23.png)
-![스크린샷 2025-03-23 오후 10.30.45.png](..%2F%EC%8A%A4%ED%81%AC%EB%A6%B0%EC%83%B7%202025-03-23%20%EC%98%A4%ED%9B%84%2010.30.45.png)
-  
+
+
 ### 허원재
 
 (자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
