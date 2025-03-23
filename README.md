@@ -57,13 +57,13 @@
 (자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
 
 - 지수 정보를 저장합니다.
-	- ![저장](https://github.com/user-attachments/assets/1370ea38-0f76-4009-94d4-4d1cb564b38d)
+	- ![저장](https://github.com/user-attachments/assets/b0f543ba-e46b-4691-b250-6db6384ef852)
 
 - 지수 정보를 수정합니다.
-	- ![수정](https://github.com/user-attachments/assets/d8286641-7bf8-4ae7-991f-73ded6bd2927)
+	- ![수정](https://github.com/user-attachments/assets/7db63c51-3a48-4321-bccb-8424aeb3b4a9)
 
 - 지수 정보를 삭제합니다.
-	- ![삭제](https://github.com/user-attachments/assets/d09bd002-786a-497e-88fd-aa7aaf4ab55c)
+	- ![삭제](https://github.com/user-attachments/assets/03a78609-b924-4d15-b8f8-f87c2ed9473a)
 
 
 
