@@ -12,7 +12,8 @@ public enum SyncJobErrorCode {
   NOT_FOUND_ITEM(HttpStatus.BAD_REQUEST, "OPEN API 데이터를 찾을 수 없습니다.", "OPEN API 오류"),
   INTERNAL_SERVER_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "잘못된 요청입니다.", "서버 오류"),
   FAILED_SYNC_INFO(HttpStatus.BAD_REQUEST, "연동에 실패했습니다.", "지수 정보 연동 실패"),
-  FAILED_CALL_API(HttpStatus.BAD_REQUEST, "API 호출에 실패했습니다.", "OPEN API 오류");
+  FAILED_CALL_API(HttpStatus.BAD_REQUEST, "API 호출에 실패했습니다.", "OPEN API 오류"),
+  FAILED_JSON_PARSE(HttpStatus.BAD_REQUEST, "잘못된 요청입니다.", "파라미터 오류");
 
   private final HttpStatus status;
   private final String message;

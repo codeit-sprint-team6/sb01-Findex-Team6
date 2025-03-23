@@ -1,5 +1,6 @@
 package com.sprint.findex_team6.exception.syncjobs;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.sprint.findex_team6.controller.SyncJobsController;
 import com.sprint.findex_team6.dto.response.ErrorResponse;
 import java.time.LocalDateTime;
@@ -71,6 +72,15 @@ public class SyncDataJobsServiceExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(NotFoundItemException.class)
   public ErrorResponse notFoundItem(NotFoundItemException e) {
+    SyncJobErrorCode errorCode = SyncJobErrorCode.FAILED_SYNC_INFO;
+
+    return new ErrorResponse(LocalDateTime.now(), errorCode.getStatus()
+        .value(), errorCode.getMessage(), errorCode.getDetails());
+  }
+
+  @ResponseStatus(HttpStatus.BAD_REQUEST)
+  @ExceptionHandler(JsonParseException.class)
+  public ErrorResponse jsonParsing(JsonParseException e) {
     SyncJobErrorCode errorCode = SyncJobErrorCode.FAILED_SYNC_INFO;
 
     return new ErrorResponse(LocalDateTime.now(), errorCode.getStatus()
