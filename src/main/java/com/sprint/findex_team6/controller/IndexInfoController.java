@@ -48,7 +48,7 @@ public class IndexInfoController {
     return ResponseEntity.status(HttpStatus.OK).body(indexInfoDto);
   }
 
-  @GetMapping("/index-infos")
+  @GetMapping
   public ResponseEntity<CursorPageResponse<IndexInfoDto>> getIndexInfos(
           @ModelAttribute IndexInfoQueryRequest request,
           @RequestParam(defaultValue = "indexName") IndexSortField sortField,
