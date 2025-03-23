@@ -385,6 +385,7 @@ public class IndexValService {
 
     // CSV 파일 응답 설정
     response.setContentType("text/csv");
+    response.setCharacterEncoding("UTF-8");
     response.setHeader("Content-Disposition", "attachment; filename=\"index_data-export.csv\"");
 
     try (PrintWriter writer = response.getWriter();
