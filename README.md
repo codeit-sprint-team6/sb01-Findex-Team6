@@ -56,10 +56,17 @@
 
 (자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
 
-- 구현1
-  - 설명1
-- 구현2
-  - 설명2
+- 지수 정보를 저장합니다.
+	https://github.com/user-attachments/assets/1370ea38-0f76-4009-94d4-4d1cb564b38d
+
+
+- 지수 정보를 수정합니다.
+	https://github.com/user-attachments/assets/d8286641-7bf8-4ae7-991f-73ded6bd2927
+
+- 지수 정보를 삭제합니다.
+	https://github.com/user-attachments/assets/d09bd002-786a-497e-88fd-aa7aaf4ab55c
+
+
 
 ### 이원길
 - 지수 정보 연동
