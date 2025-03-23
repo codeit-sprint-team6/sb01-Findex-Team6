@@ -62,9 +62,6 @@
   - 설명2
 
 ### 이원길
-
-(자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
-
 - 지수 정보 연동
   - ![지수정보연동](https://github.com/user-attachments/assets/8812b621-bd4b-4d9a-adcb-ad2db7a3ba9d)
   - 공공데이터포털의 Open API를 이용해 주가 지수 정보를 가져옵니다.
