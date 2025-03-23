@@ -3,31 +3,30 @@ package com.sprint.findex_team6.service;
 import com.sprint.findex_team6.dto.CursorPageResponse;
 import com.sprint.findex_team6.dto.IndexInfoDto;
 import com.sprint.findex_team6.dto.IndexInfoSummaryDto;
-import com.sprint.findex_team6.dto.request.*;
-import com.sprint.findex_team6.dto.response.CursorPageResponseIndexInfoDto;
+import com.sprint.findex_team6.dto.request.IndexInfoCreateRequest;
+import com.sprint.findex_team6.dto.request.IndexInfoQueryRequest;
+import com.sprint.findex_team6.dto.request.IndexInfoUpdateRequest;
+import com.sprint.findex_team6.dto.request.IndexSortField;
+import com.sprint.findex_team6.dto.request.SortDirection;
 import com.sprint.findex_team6.dto.response.ErrorResponse;
 import com.sprint.findex_team6.entity.Index;
 import com.sprint.findex_team6.entity.SourceType;
 import com.sprint.findex_team6.exception.NotFoundException;
-import com.sprint.findex_team6.mapper.CursorPageResponseMapper;
 import com.sprint.findex_team6.mapper.CursorPageResponseMapper;
 import com.sprint.findex_team6.mapper.IndexMapper;
 import com.sprint.findex_team6.repository.IndexRepository;
 import jakarta.transaction.Transactional;
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Base64;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -154,35 +153,36 @@ public class IndexService {
 
 
   public CursorPageResponse<IndexInfoDto> getIndexInfos(
-          IndexInfoQueryRequest request,
-          PageRequest pageRequest,
-          IndexSortField sortField,
-          SortDirection sortDirection
+      IndexInfoQueryRequest request,
+      PageRequest pageRequest,
+      IndexSortField sortField,
+      SortDirection sortDirection
   ) {
     String indexClassification = request.indexClassification();
+    // indexName에 와일드카드를 미리 추가합니다.
     String indexName = request.indexName();
+    if (indexName != null) {
+      indexName = "%" + indexName + "%";
+    }
     Boolean favorite = request.favorite();
     String cursor = request.cursor();
     Long idAfter = request.idAfter();
-
     Sort sort = pageRequest.getSort();
     Sort.Order order = sort.iterator().next();
     boolean isDesc = order.getDirection().isDescending();
 
     Page<Index> page;
-
-    // 커서가 없을 때는 일반 조건 검색
     if (cursor == null) {
       page = indexRepository.findAllByConditions(indexClassification, indexName, favorite, pageRequest);
     } else {
       if (sortField == IndexSortField.indexClassification) {
         page = isDesc
-                ? indexRepository.findByIndexClassificationCursorDesc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest)
-                : indexRepository.findByIndexClassificationCursorAsc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest);
+            ? indexRepository.findByIndexClassificationCursorDesc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest)
+            : indexRepository.findByIndexClassificationCursorAsc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest);
       } else if (sortField == IndexSortField.indexName) {
         page = isDesc
-                ? indexRepository.findByIndexNameCursorDesc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest)
-                : indexRepository.findByIndexNameCursorAsc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest);
+            ? indexRepository.findByIndexNameCursorDesc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest)
+            : indexRepository.findByIndexNameCursorAsc(indexClassification, indexName, favorite, cursor, idAfter, pageRequest);
       } else {
         throw new IllegalArgumentException("지원하지 않는 정렬 필드입니다.");
       }
