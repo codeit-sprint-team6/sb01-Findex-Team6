@@ -45,7 +45,7 @@ public interface IndexRepository extends JpaRepository<Index, Long> {
     @Query("""
   SELECT i FROM Index i
   WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:indexName IS NULL OR i.indexName LIKE CONCAT('%', :indexName, '%'))
   AND (:favorite IS NULL OR i.favorite = :favorite)
   AND (i.indexClassification > :cursor OR (i.indexClassification = :cursor AND i.id > :idAfter))
   """)
@@ -62,7 +62,7 @@ public interface IndexRepository extends JpaRepository<Index, Long> {
     @Query("""
   SELECT i FROM Index i
   WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:indexName IS NULL OR i.indexName LIKE CONCAT('%', :indexName, '%'))
   AND (:favorite IS NULL OR i.favorite = :favorite)
   AND (i.indexClassification < :cursor OR (i.indexClassification = :cursor AND i.id < :idAfter))
   """)
@@ -79,7 +79,7 @@ public interface IndexRepository extends JpaRepository<Index, Long> {
     @Query("""
   SELECT i FROM Index i
   WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:indexName IS NULL OR i.indexName LIKE CONCAT('%', :indexName, '%'))
   AND (:favorite IS NULL OR i.favorite = :favorite)
   AND (i.indexName > :cursor OR (i.indexName = :cursor AND i.id > :idAfter))
   """)
@@ -96,7 +96,7 @@ public interface IndexRepository extends JpaRepository<Index, Long> {
     @Query("""
   SELECT i FROM Index i
   WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:indexName IS NULL OR i.indexName LIKE CONCAT('%', :indexName, '%'))
   AND (:favorite IS NULL OR i.favorite = :favorite)
   AND (i.indexName < :cursor OR (i.indexName = :cursor AND i.id < :idAfter))
   """)
