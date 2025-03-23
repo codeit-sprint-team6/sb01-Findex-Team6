@@ -42,75 +42,89 @@ public interface IndexRepository extends JpaRepository<Index, Long> {
 
   List<Index> findByIndexClassificationAndIndexNameAndFavorite(
           String indexClassification, String indexName, Boolean favorite, Pageable pageable);
-  @Query("""
-SELECT i FROM Index i
-WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
-AND (:favorite IS NULL OR i.favorite = :favorite)
-AND (i.indexClassification > :cursor OR (i.indexClassification = :cursor AND i.id < :idAfter))
-""")
-  Page<Index> findByIndexClassificationCursorAsc(
-          String indexClassification,
-          String indexName,
-          Boolean favorite,
-          String cursor,
-          Long idAfter,
-          Pageable pageable
-  );
+    @Query("""
+  SELECT i FROM Index i
+  WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
+  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:favorite IS NULL OR i.favorite = :favorite)
+  AND (i.indexClassification > :cursor OR (i.indexClassification = :cursor AND i.id > :idAfter))
+  """)
+    Page<Index> findByIndexClassificationCursorAsc(
+            String indexClassification,
+            String indexName,
+            Boolean favorite,
+            String cursor,
+            Long idAfter,
+            Pageable pageable
+    );
 
 
-  @Query("""
-SELECT i FROM Index i
-WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
-AND (:favorite IS NULL OR i.favorite = :favorite)
-AND (i.indexClassification < :cursor OR (i.indexClassification = :cursor AND i.id < :idAfter))
-""")
-  Page<Index> findByIndexClassificationCursorDesc(
-          String indexClassification,
-          String indexName,
-          Boolean favorite,
-          String cursor,
-          Long idAfter,
-          Pageable pageable
-  );
+    @Query("""
+  SELECT i FROM Index i
+  WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
+  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:favorite IS NULL OR i.favorite = :favorite)
+  AND (i.indexClassification < :cursor OR (i.indexClassification = :cursor AND i.id < :idAfter))
+  """)
+    Page<Index> findByIndexClassificationCursorDesc(
+            String indexClassification,
+            String indexName,
+            Boolean favorite,
+            String cursor,
+            Long idAfter,
+            Pageable pageable
+    );
 
 
-  @Query("""
-SELECT i FROM Index i
-WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
-AND (:favorite IS NULL OR i.favorite = :favorite)
-AND (i.indexName > :cursor OR (i.indexName = :cursor AND i.id < :idAfter))
-""")
-  Page<Index> findByIndexNameCursorAsc(
-          String indexClassification,
-          String indexName,
-          Boolean favorite,
-          String cursor,
-          Long idAfter,
-          Pageable pageable
-  );
+    @Query("""
+  SELECT i FROM Index i
+  WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
+  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:favorite IS NULL OR i.favorite = :favorite)
+  AND (i.indexName > :cursor OR (i.indexName = :cursor AND i.id > :idAfter))
+  """)
+    Page<Index> findByIndexNameCursorAsc(
+            String indexClassification,
+            String indexName,
+            Boolean favorite,
+            String cursor,
+            Long idAfter,
+            Pageable pageable
+    );
 
 
-  @Query("""
-SELECT i FROM Index i
-WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
-AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
-AND (:favorite IS NULL OR i.favorite = :favorite)
-AND (i.indexName < :cursor OR (i.indexName = :cursor AND i.id < :idAfter))
-""")
-  Page<Index> findByIndexNameCursorDesc(
-          String indexClassification,
-          String indexName,
-          Boolean favorite,
-          String cursor,
-          Long idAfter,
-          Pageable pageable
-  );
+    @Query("""
+  SELECT i FROM Index i
+  WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
+  AND (:indexName IS NULL OR i.indexName LIKE %:indexName%)
+  AND (:favorite IS NULL OR i.favorite = :favorite)
+  AND (i.indexName < :cursor OR (i.indexName = :cursor AND i.id < :idAfter))
+  """)
+    Page<Index> findByIndexNameCursorDesc(
+            String indexClassification,
+            String indexName,
+            Boolean favorite,
+            String cursor,
+            Long idAfter,
+            Pageable pageable
+    );
 
 
-  List<Index> findAll();
+    List<Index> findAll();
 
-  Page<Index> findAllByConditions(String indexClassification, String indexName, Boolean favorite, PageRequest pageRequest);
+
+    @Query("""
+  SELECT i FROM Index i
+  WHERE (:indexClassification IS NULL OR i.indexClassification = :indexClassification)
+  AND (:indexName IS NULL OR i.indexName LIKE CONCAT('%', :indexName, '%'))
+  AND (:favorite IS NULL OR i.favorite = :favorite)
+  ORDER BY i.id ASC
+  """)
+    Page<Index> findAllByConditions(
+            String indexClassification,
+            String indexName,
+            Boolean favorite,
+            Pageable pageable
+    );
+
 }
