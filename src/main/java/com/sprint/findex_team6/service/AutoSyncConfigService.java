@@ -5,7 +5,9 @@ import com.sprint.findex_team6.dto.request.AutoSyncConfigCursorPageRequest;
 import com.sprint.findex_team6.dto.request.AutoSyncConfigUpdateRequest;
 import com.sprint.findex_team6.dto.response.CursorPageResponseSyncDto;
 import com.sprint.findex_team6.entity.AutoIntegration;
+import com.sprint.findex_team6.exception.syncjobs.NotFoundIndexException;
 import com.sprint.findex_team6.repository.AutoIntegrationRepository;
+import com.sprint.findex_team6.repository.IndexRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -19,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class AutoSyncConfigService {
 
   private final AutoIntegrationRepository autoIntegrationRepository;
+  private final IndexRepository indexRepository;
 
   /**
   * @methodName : modify
@@ -29,7 +32,7 @@ public class AutoSyncConfigService {
   public AutoSyncConfigDto modify(AutoSyncConfigUpdateRequest request, Long id) {
 
     AutoIntegration autoIntegration = autoIntegrationRepository.findById(id)
-        .orElseThrow(() -> new IllegalArgumentException("찾는 자동 연동 설정이 없습니다."));
+        .orElseThrow(NotFoundIndexException::new);
 
     autoIntegration.changeEnable(request.enabled());
 
@@ -51,6 +54,8 @@ public class AutoSyncConfigService {
   **/
   public CursorPageResponseSyncDto<AutoSyncConfigDto> search(
       AutoSyncConfigCursorPageRequest request, Pageable slice) {
+
+    checkInvalidValue(request);
 
     Slice<AutoSyncConfigDto> pagedData = autoIntegrationRepository.cursorBasePagination(
         request, slice);
@@ -87,6 +92,11 @@ public class AutoSyncConfigService {
         totalElements,
         hasNext
     );
+  }
+
+  private void checkInvalidValue(AutoSyncConfigCursorPageRequest request) {
+    indexRepository.findById(request.indexInfoId())
+        .orElseThrow(NotFoundIndexException::new);
   }
 
   private String getNextCursor(String nextCursor, Boolean enableBaseNextCursor) {
