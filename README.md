@@ -129,7 +129,8 @@ https://github.com/user-attachments/assets/bca6cfaf-fc06-4644-8ada-92ff383b61b2
   - 리스트를 순회하며 각 데이터를 CSV의 형식으로 변환하여 저장합니다.
 <img width="1403" alt="export 2025-03-23 오후 10 30 02" src="https://github.com/user-attachments/assets/3ce1950e-b964-4c27-bae6-a9f15aacc4ab" />
 <img width="337" alt="download 2025-03-23 오후 10 30 23" src="https://github.com/user-attachments/assets/6f403dbf-a8ac-4732-bc8e-23b2588febcb" />
-<img width="687" alt="csvFile 2025-03-23 오후 10 30 45" src="https://github.com/user-attachments/assets/164e79b2-408f-4038-b770-cbb07800c4dd" />
+<img width="665" alt="csvFile 2025-03-23 오후 11 28 08" src="https://github.com/user-attachments/assets/b9cf65d5-030e-4da6-88b6-c46ace4c61fd" />
+
 
 
 
