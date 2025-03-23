@@ -21,7 +21,7 @@ public class SyncJobsSearchService {
     // 페이징해서 데이터 가져오기
     Slice<SyncJobDto> pagedSlice = indexDataLinkRepository.cursorBasePagination(request, slice);
 
-    long totalElementCount = indexDataLinkRepository.count();
+    long totalElementCount = indexDataLinkRepository.cursorBasePaginationTotalCount(request);
     int size = getSize(request);
 
     List<SyncJobDto> content = pagedSlice.getContent();

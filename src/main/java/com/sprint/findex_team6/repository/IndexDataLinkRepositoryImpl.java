@@ -18,11 +18,13 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+@Slf4j
 @Repository
 @RequiredArgsConstructor
 public class IndexDataLinkRepositoryImpl implements IndexDataLinkRepositoryQuerydsl {
@@ -96,8 +98,7 @@ public class IndexDataLinkRepositoryImpl implements IndexDataLinkRepositoryQuery
             jobTimeFrom(request),
             jobTimeTo(request),
             statusEq(request.getStatus()),
-            jobTypeEq(request.getJobType()),
-            cursor(request)
+            jobTypeEq(request.getJobType())
         )
         .fetchOne();
   }
@@ -284,11 +285,16 @@ public class IndexDataLinkRepositoryImpl implements IndexDataLinkRepositoryQuery
    * @Description: 쿼리 조건 중 작업상태(status)가 success면 db에서 꺼낸 indexDataLink의 result가 true인 것만 뽑음
    **/
   private BooleanExpression statusEq(String status) {
+    LocalDateTime now = LocalDateTime.now().plusDays(1); // 오늘 끝까지 포함
+    LocalDateTime lastWeek = now.minusDays(7);
+
+    log.error("Date range: {} to {}", lastWeek, now);
+
     if (status != null) {
       if (status.equals("SUCCESS")) {
-        return indexDataLink.result.eq(true);
+        return indexDataLink.result.eq(true).and(indexDataLink.jobTime.between(lastWeek, now));
       } else if (status.equals("FAILED")) {
-        return indexDataLink.result.eq(false);
+        return indexDataLink.result.eq(false).and(indexDataLink.jobTime.between(lastWeek, now));
       }
     }
 
@@ -338,6 +344,10 @@ public class IndexDataLinkRepositoryImpl implements IndexDataLinkRepositoryQuery
    * @Description: index의 기준 시점을 기준으로 같거나 그 이전 날부터 돌아가며 데이터 뽑기
    **/
   private BooleanExpression baseDateTo(CursorPageRequest request) {
+    if (request.getStatus() != null) {
+      return null;
+    }
+
     return request.getBaseDateTo() != null
         ? index.baseDate.loe(request.getBaseDateTo())
         : null;
@@ -350,6 +360,10 @@ public class IndexDataLinkRepositoryImpl implements IndexDataLinkRepositoryQuery
    * @Description: index의 기준 시점을 기준으로 같거나 다음날부터 데이터 뽑기
    **/
   private BooleanExpression baseDateFrom(CursorPageRequest request) {
+    if (request.getStatus() != null) {
+      return null;
+    }
+
     return request.getBaseDateFrom() != null
         ? index.baseDate.goe(request.getBaseDateFrom())
         : null;
