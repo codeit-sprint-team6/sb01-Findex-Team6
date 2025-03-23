@@ -1,5 +1,6 @@
 package com.sprint.findex_team6.dto.dashboard;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.math.BigDecimal;
 import java.time.LocalDate;

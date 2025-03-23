@@ -26,8 +26,12 @@ import java.io.PrintWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -183,15 +187,35 @@ public class IndexValService {
     //즐겨찾기 한 지수 ID목록 추출
     List<Long> indexIds = favoriteIndexes.stream().map(Index::getId).toList();
 
-    List<IndexVal> indexValList = indexValRepository.findByIndexIdInAndBaseDateIn(
-        indexIds, List.of(startDate, endDate));
+    List<IndexVal> indexValList = indexValRepository.findByIndex_IdInAndBaseDateBetween(
+        indexIds, startDate, endDate);
+
+    Map<Long, LocalDate> earliestDateByIndex = new HashMap<>();
+    Map<Long, LocalDate> latestDateByIndex = new HashMap<>();
+
+    for (IndexVal val : indexValList) {
+      Long indexId = val.getIndex().getId();
+      LocalDate date = val.getBaseDate();
+
+      if (!earliestDateByIndex.containsKey(indexId) ||
+          date.isBefore(earliestDateByIndex.get(indexId))) {
+        earliestDateByIndex.put(indexId, date);
+      }
+
+      if (!latestDateByIndex.containsKey(indexId) ||
+          date.isAfter(latestDateByIndex.get(indexId))) {
+        latestDateByIndex.put(indexId, date);
+      }
+    }
 
     Map<Long, IndexVal> startDataMap = indexValList.stream()
-        .filter(data -> data.getBaseDate().equals(startDate))
+        .filter(data -> earliestDateByIndex.containsKey(data.getIndex().getId()) &&
+            data.getBaseDate().equals(earliestDateByIndex.get(data.getIndex().getId())))
         .collect(Collectors.toMap(data -> data.getIndex().getId(), Function.identity()));
 
     Map<Long, IndexVal> endDataMap = indexValList.stream()
-        .filter(data -> data.getBaseDate().equals(endDate))
+        .filter(data -> latestDateByIndex.containsKey(data.getIndex().getId()) &&
+            data.getBaseDate().equals(latestDateByIndex.get(data.getIndex().getId())))
         .collect(Collectors.toMap(data -> data.getIndex().getId(), Function.identity()));
 
     return favoriteIndexes.stream()

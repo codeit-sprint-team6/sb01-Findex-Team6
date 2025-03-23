@@ -74,4 +74,5 @@ public interface IndexValRepository extends JpaRepository<IndexVal, Long> {
       Long indexId, LocalDate startDate, LocalDate endDate,
       BigDecimal cursor, Long idAfter, Pageable pageable);
 
+  List<IndexVal> findByIndex_IdInAndBaseDateBetween(List<Long> attr0, LocalDate baseDateAfter, LocalDate baseDateAfter1);
 }
