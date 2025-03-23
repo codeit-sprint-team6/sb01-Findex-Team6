@@ -65,10 +65,31 @@
 
 (자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
 
-- 구현1
-  - 설명1
-- 구현2
-  - 설명2
+- 지수 정보 연동
+  - ![지수정보연동](https://github.com/user-attachments/assets/8812b621-bd4b-4d9a-adcb-ad2db7a3ba9d)
+  - 공공데이터포털의 Open API를 이용해 주가 지수 정보를 가져옵니다.
+
+- 지수 데이터 연동
+  - ![지수데이터연동](https://github.com/user-attachments/assets/69afc93e-a246-43b5-8c4e-287bab6e1fc5)
+  - 선택한 지수의 시가, 고가, 저가 같은 데이터를 Open API를 통해 가져옵니다.
+
+- 연동 목록 조회
+  - ![목록조회1](https://github.com/user-attachments/assets/c17fc55e-240b-47f7-8095-afc59e1184e8)
+  - ![목록조회2](https://github.com/user-attachments/assets/bc29bbf2-a53c-4e04-9edc-3b194006e708)
+  - ![목록조회3](https://github.com/user-attachments/assets/138cea04-a00f-4a50-bcbd-2108c70a463b)
+  - 지수 정보와 데이터를 연동한 기록을 조회할 수 있습니다.
+  - 커서 페이지네이션을 지원합니다.
+ 
+- 자동 연동 설정
+  - ![자동연동설정수정](https://github.com/user-attachments/assets/6783b162-1a04-4eb8-91c9-67dd19ec7768)
+  - 지수 데이터를 자정 12시에 자동으로 연동할 수 있게 설정할 수 있습니다.
+ 
+- 자동 연동 목록 조회
+  - ![자동 연동목록조회](https://github.com/user-attachments/assets/8c87ec94-dd72-4e5c-98f2-b7c7f691ec52)
+  - 자동으로 연동할 지수 목록을 조회할 수 있습니다.
+  - 커서 페이지네이션을 지원합니다.
+
+
 
 ### 이주녕
 
