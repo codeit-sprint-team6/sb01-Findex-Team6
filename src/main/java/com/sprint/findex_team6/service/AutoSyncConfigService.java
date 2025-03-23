@@ -55,8 +55,6 @@ public class AutoSyncConfigService {
   public CursorPageResponseSyncDto<AutoSyncConfigDto> search(
       AutoSyncConfigCursorPageRequest request, Pageable slice) {
 
-    checkInvalidValue(request);
-
     Slice<AutoSyncConfigDto> pagedData = autoIntegrationRepository.cursorBasePagination(
         request, slice);
 
@@ -92,11 +90,6 @@ public class AutoSyncConfigService {
         totalElements,
         hasNext
     );
-  }
-
-  private void checkInvalidValue(AutoSyncConfigCursorPageRequest request) {
-    indexRepository.findById(request.indexInfoId())
-        .orElseThrow(NotFoundIndexException::new);
   }
 
   private String getNextCursor(String nextCursor, Boolean enableBaseNextCursor) {
