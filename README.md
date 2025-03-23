@@ -99,23 +99,106 @@ src
  ┃ ┃ ┣ com
  ┃ ┃ ┃ ┣ sprint
  ┃ ┃ ┃ ┃ ┣ findex_team6
+ ┃ ┃ ┃ ┃ ┃ ┣ batch
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ BatchAutoSyncIndexData.java
+ ┃ ┃ ┃ ┃ ┃ ┣ config
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ QueryDSLConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ RestTemplateConfig.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SwaggerConfig.java
  ┃ ┃ ┃ ┃ ┃ ┣ controller
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValController.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncJobsController.java
  ┃ ┃ ┃ ┃ ┃ ┣ dto
- ┃ ┃ ┃ ┃ ┃ ┃ ┗ IndexInfoDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ dashboard
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ChartDataPoint.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexChartDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexPerformanceDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValCsvDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ RankedIndexPerformanceDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ request
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoSyncConfigCursorPageRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoSyncConfigUpdateRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataCreateRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataQueryRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataSortField.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataSyncRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataUpdateRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoCreateRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoQueryRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoUpdateRequest.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexSortField.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SortDirection.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ response
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponseIndexInfoDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponseSyncDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponseSyncJobDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ErrorResponse.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoSyncConfigDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponse.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponseSyncJobDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ DashboardDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexInfoSummaryDto.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncJobDto.java
  ┃ ┃ ┃ ┃ ┃ ┣ entity
- ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegergration.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegration.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ ContentType.java
- ┃ ┃ ┃ ┃ ┃ ┃ ┣ DashBoard.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ Dashboard.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ Index.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataLink.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexVal.java
  ┃ ┃ ┃ ┃ ┃ ┃ ┣ SourceType.java
+ ┃ ┃ ┃ ┃ ┃ ┣ error
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CustomException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ ErrorCode.java
+ ┃ ┃ ┃ ┃ ┃ ┣ exception
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ syncjobs
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ DuplicateIndexException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ FailedCallOpenApiException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ NotFoundIndeValException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ NotFoundIndexException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ NotFoundItemException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncDataJobsServiceExceptionHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncFailedException.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncJobErrorCode.java
+ ┃ ┃ ┃ ┃ ┃ ┃ GlobalExceptionHandler.java
+ ┃ ┃ ┃ ┃ ┃ ┃ NotFoundException.java
  ┃ ┃ ┃ ┃ ┃ ┣ mapper
- ┃ ┃ ┃ ┃ ┃ ┃ ┣ IdexMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ CursorPageResponseMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDateLinkMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValMapper.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValMapperHelper.java
  ┃ ┃ ┃ ┃ ┃ ┣ repository
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationQuerydslRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationRepositoryImpl.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ DashboardRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataLinkRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataLinkRepositoryImpl.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexDataLinkRepositoryQuerydsl.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexRepository.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValRepository.java
  ┃ ┃ ┃ ┃ ┃ ┣ service
+ ┃ ┃ ┃ ┃ ┃ ┃ ┗ util
+ ┃ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncJobUtils.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoIntegrationService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ AutoSyncConfigService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ IndexValService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncDataJobsService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncInfoJobsService.java
+ ┃ ┃ ┃ ┃ ┃ ┃ ┣ SyncJobsSearchService.java
+ ┃ ┃ ┃ ┃ ┃ ┣ FindexTeam6Application.java
  ┃ ┣ resources
  ┃ ┃ ┣ application.yml
+ ┃ ┃ ┣ schema.sql
  ┃ ┃ ┗ static
  ┃ ┃ ┃ ┣ css
  ┃ ┃ ┃ ┃ ┗ style.css
@@ -135,9 +218,7 @@ src
 
 ## 🌐 구현 홈페이지
 
-(개발한 홈페이지에 대한 링크 게시)
-
-https://www.codeit.kr/
+https://findex.realits.me/
 
 ------
 
