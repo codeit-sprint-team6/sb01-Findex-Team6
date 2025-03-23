@@ -51,8 +51,8 @@
   - 필터조건과 커서기반 페이지네이션을 적용하여 지수정보 리스트를 조회
   - ![GIFMaker_me](https://github.com/user-attachments/assets/2c413043-cc79-41b7-b0d6-44d1f98fbc0c)
 
-- 구현2
-  - 설명2
+- 지수 정보 단건 조회 
+- 지수 요약 정보 목록 조회
 
 ### 이민주
 
