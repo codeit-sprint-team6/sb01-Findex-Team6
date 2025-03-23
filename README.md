@@ -137,10 +137,14 @@ https://github.com/user-attachments/assets/bca6cfaf-fc06-4644-8ada-92ff383b61b2
 
 (자신이 개발한 기능에 대한 사진이나 gif 파일 첨부)
 
-- 구현1
-  - 설명1
-- 구현2
-  - 설명2
+- 지수 데이터 생성/수정/삭제
+  - 사용자 지정 지수 데이터를 생성/수정/삭제합니다.
+  - ![생성수정삭제 (1)](https://github.com/user-attachments/assets/f5b5c8f4-1298-4775-bd4e-91e9f5b844b0)
+
+- 지수 데이터 목록 조회
+  - 커서 기반 페이지네이션으로 조건에 맞는 지수 데이터의 목록을 가져옵니다.
+  - ![지수데이터목록조회 (1)](https://github.com/user-attachments/assets/7d64a872-4088-485a-b18d-c8220e9b302b)
+
 
 ------
 
