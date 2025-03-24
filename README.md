@@ -285,4 +285,6 @@ https://findex.realits.me/
 
 ## 📄 프로젝트 회고록
 
-(제작한 발표자료 링크 혹은 첨부파일 첨부)
+[Findex.pdf](https://github.com/user-attachments/files/19415489/Findex-5.pdf)
+
+
